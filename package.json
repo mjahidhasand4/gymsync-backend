@@ -1,7 +1,7 @@
 {
   "name": "gymsync",
   "module": "index.ts",
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
     "dev": "nodemon --watch . --ext ts,json --exec \"bun run app/index.ts\"",
     "build": "tsc",
