@@ -1,0 +1,52 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING")
+}
+
+enum ROLE {
+  ADMIN
+  TRAINER
+  TRAINEE
+}
+
+model User {
+  id       String @id @default(cuid())
+  name     String @db.VarChar(50)
+  email    String @unique @db.VarChar(64)
+  password String @db.VarChar(100)
+  role     ROLE   @default(TRAINEE)
+
+  TrainerSchedule TrainerSchedule[]
+  ScheduleTrainee ScheduleTrainee[]
+}
+
+model Schedule {
+  id        String   @id @default(uuid()) @db.Uuid
+  startTime DateTime
+  endTime   DateTime
+
+  trainees        ScheduleTrainee[]
+  TrainerSchedule TrainerSchedule[]
+}
+
+model TrainerSchedule {
+  id String @id @default(uuid()) @db.Uuid
+
+  trainerId  String
+  trainer    User     @relation(fields: [trainerId], references: [id])
+  scheduleId String   @db.Uuid
+  schedule   Schedule @relation(fields: [scheduleId], references: [id])
+}
+
+model ScheduleTrainee {
+  id         String   @id @default(uuid()) @db.Uuid
+  scheduleId String   @db.Uuid
+  schedule   Schedule @relation(fields: [scheduleId], references: [id])
+  traineeId  String
+  trainee    User     @relation(fields: [traineeId], references: [id])
+}
