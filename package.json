@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "nodemon --watch . --ext ts,json --exec \"bun run app/index.ts\"",
     "build": "tsc",
-    "start": "node dist/app/index.js",
+    "start": "bun run build && node dist/app/index.js",
     "prisma studio": "npx prisma studio",
     "prisma migrate": "npx prisma migrate dev"
   },
